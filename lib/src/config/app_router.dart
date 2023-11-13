@@ -1,63 +1,62 @@
 import 'dart:async';
 
-import 'package:clean_bloc/src/features/auth/presentation/view/login_screen.dart';
-import 'package:clean_bloc/src/features/auth/presentation/view/signup_screen.dart';
-import 'package:clean_bloc/src/features/feed/presentation/view/discover_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/auth/presentation/view/login_screen.dart';
+import '../features/auth/presentation/view/signup_screen.dart';
+import '../features/feed/presentation/view/discover_screen.dart';
 import '../features/feed/presentation/view/feed_screen.dart';
 
 class AppRouter {
-  //TODO: Add the auth bloc as an input
+  // TODO: Add the auth bloc as an input.
   AppRouter();
+
   late final GoRouter router = GoRouter(
-    routes: <RouteBase>[
+    routes: <GoRoute>[
       GoRoute(
         name: 'feed',
-        path: '/',
+        path: '/feed',
         builder: (BuildContext context, GoRouterState state) {
           return const FeedScreen();
         },
-        routes: <RouteBase>[
+      ),
+      GoRoute(
+        name: 'discover',
+        path: '/discover',
+        builder: (BuildContext context, GoRouterState state) {
+          return const DiscoverScreen();
+        },
+        routes: [
           GoRoute(
-            name: 'discover',
-            path: 'discover',
+            name: 'user',
+            path: ':userId',
             builder: (BuildContext context, GoRouterState state) {
-              return const DiscoverScreen();
+              return Container();
             },
-            routes: [
-              GoRoute(
-                path: 'userId',
-                name: 'user',
-                builder: (BuildContext context, GoRouterState state) {
-                  return Container();
-                },
-              ),
-            ],
-          ),
-          GoRoute(
-            name: 'login',
-            path: 'login',
-            builder: (BuildContext context, GoRouterState state) {
-              return const LoginScreen();
-            },
-            routes: [
-              GoRoute(
-                path: 'signup',
-                name: 'signup',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const SignupScreen();
-                },
-              ),
-            ],
           ),
         ],
-        //TODO: Redirect users to the login screen if they're not authenticated
-        //Else, go to the feed screen
-        //redirect:
+      ),
+      GoRoute(
+        name: 'login',
+        path: '/',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LoginScreen();
+        },
+        routes: [
+          GoRoute(
+            name: 'signup',
+            path: 'signup',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SignupScreen();
+            },
+          ),
+        ],
       ),
     ],
+    // TODO: Redirect users to the login screen if they're not
+    // authenticated. Else, go to the feed screen.
+    // redirect:
   );
 }
 
