@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:clean_bloc/src/config/app_router.dart';
 import 'package:clean_bloc/src/config/app_theme.dart';
+import 'package:clean_bloc/src/shared/presentation/widgets/custom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,10 +14,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: CustomTheme().theme(),
-      home: const HomeScreen(),
+      routerConfig: AppRouter().router,
     );
   }
 }
@@ -26,7 +28,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flutter App with Clean Architecture')),
+      appBar: AppBar(
+        title: const Text(
+          'Flutter App with Clean Architecture',
+        ),
+      ),
+      bottomNavigationBar: const CustomNavBar(),
     );
   }
 }
