@@ -10,6 +10,7 @@ class FeedScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Feed'),
+        centerTitle: true,
       ),
       bottomNavigationBar: const CustomNavBar(),
     );

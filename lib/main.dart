@@ -55,10 +55,15 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ],
-        child: MaterialApp.router(
-          title: 'Flutter Demo',
-          theme: CustomTheme().theme(),
-          routerConfig: AppRouter().router,
+        child: Builder(
+          builder: (context) {
+            return MaterialApp.router(
+              title: 'Flutter Demo',
+              theme: CustomTheme().theme(),
+                  routerConfig: AppRouter(context.read<AuthBloc>()).router,
+
+            );
+          }
         ),
       ),
     );

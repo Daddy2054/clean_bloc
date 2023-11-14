@@ -3,20 +3,22 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/auth/data/datasources/mock_auth_datasource.dart';
+import '../features/auth/presentation/blocs/auth/auth_bloc.dart';
 import '../features/auth/presentation/view/login_screen.dart';
 import '../features/auth/presentation/view/signup_screen.dart';
 import '../features/feed/presentation/view/discover_screen.dart';
 import '../features/feed/presentation/view/feed_screen.dart';
 
 class AppRouter {
-  // TODO: Add the auth bloc as an input.
-  AppRouter();
+  final AuthBloc authBloc;
+  AppRouter(this.authBloc);
 
   late final GoRouter router = GoRouter(
     routes: <GoRoute>[
       GoRoute(
         name: 'feed',
-        path: '/feed',
+        path: '/',
         builder: (BuildContext context, GoRouterState state) {
           return const FeedScreen();
         },
@@ -39,7 +41,7 @@ class AppRouter {
       ),
       GoRoute(
         name: 'login',
-        path: '/',
+        path: '/login',
         builder: (BuildContext context, GoRouterState state) {
           return const LoginScreen();
         },
@@ -54,9 +56,30 @@ class AppRouter {
         ],
       ),
     ],
-    // TODO: Redirect users to the login screen if they're not
-    // authenticated. Else, go to the feed screen.
-    // redirect:
+   redirect: (
+      BuildContext context,
+      GoRouterState state,
+    ) {
+      final loginLocation = state.namedLocation('login');
+      final signupLocation = state.namedLocation('signup');
+
+      final bool isLoggedIn = authBloc.state.status == AuthStatus.authenticated;
+
+      final isLoggingIn = state.subloc == loginLocation;
+      final isSigningUp = state.subloc == signupLocation;
+
+      if (!isLoggedIn && !isLoggingIn && !isSigningUp) {
+        return '/login';
+      }
+      if (isLoggedIn && isLoggingIn) {
+        return '/';
+      }
+      if (isLoggedIn && isSigningUp) {
+        return '/';
+      }
+      return null;
+    },
+    refreshListenable: GoRouterRefreshStream(authBloc.stream),
   );
 }
 
