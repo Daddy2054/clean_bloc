@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../shared/presentation/widgets/widgets.dart';
+import '../blocs/login/login_cubit.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -11,22 +14,24 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
-        centerTitle: true,
       ),
-      body: const SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Spacer(flex: 3),
-              _Username(),
-              SizedBox(height: 10),
-              _Password(),
-              SizedBox(height: 10),
-              _LoginButton(),
-              Spacer(flex: 2),
-              _SignupRedirect(),
-            ],
+      body: BlocListener<LoginCubit, LoginState>(
+        listener: (context, state) {},
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Spacer(flex: 3),
+                _Username(),
+                const SizedBox(height: 10),
+                _Password(),
+                const SizedBox(height: 10),
+                _LoginButton(),
+                Spacer(flex: 2),
+                _SignupRedirect(),
+              ],
+            ),
           ),
         ),
       ),
@@ -70,21 +75,41 @@ class _LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          minimumSize: const Size(100, 50),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          )),
-      child: Text(
-        'Login',
-        style: Theme.of(context)
-            .textTheme
-            .titleMedium!
-            .copyWith(color: Colors.black),
-      ),
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) {
+        return previous.status != current.status;
+      },
+      builder: (context, state) {
+        return state.status == FormzStatus.submissionInProgress
+            ? const CircularProgressIndicator(color: Colors.white)
+            : ElevatedButton(
+                onPressed: () {
+                  state.status == FormzStatus.valid
+                      ? context.read<LoginCubit>().logInWithCredentials()
+                      : ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Check your username and password: ${state.status}',
+                            ),
+                          ),
+                        );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  minimumSize: const Size(100, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: Text(
+                  'Login',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(color: Colors.black),
+                ),
+              );
+      },
     );
   }
 }
@@ -96,9 +121,20 @@ class _Password extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomTextField(
-      labelText: 'Password',
-      obscureText: true,
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) {
+        return previous.password != current.password;
+      },
+      builder: (context, state) {
+        return CustomTextField(
+          labelText: 'Password',
+          obscureText: true,
+          errorText: state.password.invalid ? 'The password is invalid' : null,
+          onChanged: (password) {
+            context.read<LoginCubit>().passwordChanged(password);
+          },
+        );
+      },
     );
   }
 }
@@ -110,9 +146,20 @@ class _Username extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomTextField(
-      labelText: 'Username',
-      textInputType: TextInputType.name,
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) {
+        return previous.username != current.username;
+      },
+      builder: (context, state) {
+        return CustomTextField(
+          labelText: 'Username',
+          errorText: state.username.invalid ? 'The username is invalid' : null,
+          onChanged: (username) {
+            context.read<LoginCubit>().usernameChanged(username);
+          },
+          textInputType: TextInputType.name,
+        );
+      },
     );
   }
 }
