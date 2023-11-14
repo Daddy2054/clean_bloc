@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import '../../../../../shared/domain/entities/user.dart';
+import '../../../data/datasources/mock_auth_datasource.dart';
 import '../../../domain/entities/logged_in_user.dart';
 import '../../../domain/usecases/login_user.dart';
 
@@ -54,6 +55,13 @@ class LoginCubit extends Cubit<LoginState> {
         ),
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
+    } on LoginWithUsernameAndPasswordFailure catch (err) {
+      emit(
+        state.copyWith(
+          errorText: err.message,
+          status: FormzStatus.submissionFailure,
+        ),
+      );
     } catch (err) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }

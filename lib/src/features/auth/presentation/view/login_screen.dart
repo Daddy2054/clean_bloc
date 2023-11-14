@@ -14,19 +14,28 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
+        centerTitle: true,
       ),
       body: BlocListener<LoginCubit, LoginState>(
-        listener: (context, state) {},
-        child: SafeArea(
+        listener: (context, state) {
+          if (state.status.isSubmissionFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorText ?? 'Auth failure'),
+              ),
+            );
+          }
+        },
+        child: const SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: EdgeInsets.all(20.0),
             child: Column(
               children: [
                 Spacer(flex: 3),
                 _Username(),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 _Password(),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 _LoginButton(),
                 Spacer(flex: 2),
                 _SignupRedirect(),
