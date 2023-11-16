@@ -1,12 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/auth/data/datasources/mock_auth_datasource.dart';
+//import '../features/auth/data/datasources/mock_auth_datasource.dart';
 import '../features/auth/presentation/blocs/auth/auth_bloc.dart';
 import '../features/auth/presentation/view/login_screen.dart';
 import '../features/auth/presentation/view/signup_screen.dart';
+import '../features/feed/data/repositories/post_repository_impl.dart';
+import '../features/feed/domain/usecases/get_posts.dart';
+import '../features/feed/presentation/blocs/feed/feed_bloc.dart';
 import '../features/feed/presentation/view/discover_screen.dart';
 import '../features/feed/presentation/view/feed_screen.dart';
 
@@ -20,7 +24,14 @@ class AppRouter {
         name: 'feed',
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const FeedScreen();
+          return BlocProvider(
+            create: (context) => FeedBloc(
+              getPosts: GetPosts(
+                context.read<PostRepositoryImpl>(),
+              ),
+            )..add(FeedGetPosts()),
+            child: const FeedScreen(),
+          );
         },
       ),
       GoRoute(
@@ -56,30 +67,30 @@ class AppRouter {
         ],
       ),
     ],
-   redirect: (
-      BuildContext context,
-      GoRouterState state,
-    ) {
-      final loginLocation = state.namedLocation('login');
-      final signupLocation = state.namedLocation('signup');
+    // redirect: (
+    //   BuildContext context,
+    //   GoRouterState state,
+    // ) {
+    //   final loginLocation = state.namedLocation('login');
+    //   final signupLocation = state.namedLocation('signup');
 
-      final bool isLoggedIn = authBloc.state.status == AuthStatus.authenticated;
+    //   final bool isLoggedIn = authBloc.state.status == AuthStatus.authenticated;
 
-      final isLoggingIn = state.subloc == loginLocation;
-      final isSigningUp = state.subloc == signupLocation;
+    //   final isLoggingIn = state.subloc == loginLocation;
+    //   final isSigningUp = state.subloc == signupLocation;
 
-      if (!isLoggedIn && !isLoggingIn && !isSigningUp) {
-        return '/login';
-      }
-      if (isLoggedIn && isLoggingIn) {
-        return '/';
-      }
-      if (isLoggedIn && isSigningUp) {
-        return '/';
-      }
-      return null;
-    },
-    refreshListenable: GoRouterRefreshStream(authBloc.stream),
+    //   if (!isLoggedIn && !isLoggingIn && !isSigningUp) {
+    //     return '/login';
+    //   }
+    //   if (isLoggedIn && isLoggingIn) {
+    //     return '/';
+    //   }
+    //   if (isLoggedIn && isSigningUp) {
+    //     return '/';
+    //   }
+    //   return null;
+    // },
+    // refreshListenable: GoRouterRefreshStream(authBloc.stream),
   );
 }
 
