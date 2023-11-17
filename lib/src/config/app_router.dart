@@ -9,7 +9,10 @@ import '../features/auth/presentation/blocs/auth/auth_bloc.dart';
 import '../features/auth/presentation/view/login_screen.dart';
 import '../features/auth/presentation/view/signup_screen.dart';
 import '../features/feed/data/repositories/post_repository_impl.dart';
+import '../features/feed/data/repositories/user_repository_impl.dart';
 import '../features/feed/domain/usecases/get_posts.dart';
+import '../features/feed/domain/usecases/get_users.dart';
+import '../features/feed/presentation/blocs/discover/discover_bloc.dart';
 import '../features/feed/presentation/blocs/feed/feed_bloc.dart';
 import '../features/feed/presentation/view/discover_screen.dart';
 import '../features/feed/presentation/view/feed_screen.dart';
@@ -38,7 +41,14 @@ class AppRouter {
         name: 'discover',
         path: '/discover',
         builder: (BuildContext context, GoRouterState state) {
-          return const DiscoverScreen();
+          return BlocProvider(
+            create: (context) => DiscoverBloc(
+              getUsers: GetUsers(
+                context.read<UserRepositoryImpl>(),
+              ),
+            )..add(DiscoverGetUsers()),
+            child: const DiscoverScreen(),
+          );
         },
         routes: [
           GoRoute(
