@@ -17,6 +17,7 @@ import 'src/features/auth/domain/usecases/signup_user.dart';
 import 'src/features/auth/presentation/blocs/auth/auth_bloc.dart';
 import 'src/features/auth/presentation/blocs/login/login_cubit.dart';
 import 'src/features/auth/presentation/blocs/signup/signup_cubit.dart';
+import 'src/features/feed/data/datasources/local_feed_datasource.dart';
 import 'src/features/feed/data/datasources/mock_feed_datasource.dart';
 import 'src/features/feed/data/repositories/post_repository_impl.dart';
 import 'src/features/feed/data/repositories/user_repository_impl.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => PostRepositoryImpl(
             MockFeedDatasourceImpl(),
+            LocalFeedDatasourceImpl(),
           ),
         ),
         RepositoryProvider(
