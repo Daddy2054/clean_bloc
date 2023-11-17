@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'src/config/app_router.dart';
 import 'src/config/app_theme.dart';
@@ -18,9 +20,15 @@ import 'src/features/auth/presentation/blocs/signup/signup_cubit.dart';
 import 'src/features/feed/data/datasources/mock_feed_datasource.dart';
 import 'src/features/feed/data/repositories/post_repository_impl.dart';
 import 'src/features/feed/data/repositories/user_repository_impl.dart';
+import 'src/shared/data/models/post_model.dart';
+import 'src/shared/data/models/user_model.dart';
 import 'src/shared/presentation/widgets/custom_nav_bar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(PostModelAdapter());
   runApp(const MyApp());
 }
 

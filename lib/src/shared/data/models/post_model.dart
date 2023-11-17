@@ -1,11 +1,21 @@
 
 import '../../domain/entities/post.dart';
+import 'package:hive/hive.dart';
+
 import 'user_model.dart';
 
+
+part 'post_model.g.dart';
+
+@HiveType(typeId: 1)
 class PostModel {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final UserModel user;
+  @HiveField(2)
   final String caption;
+  @HiveField(3)
   final String assetPath;
 
   PostModel({
