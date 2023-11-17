@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import '../../../../shared/domain/entities/user.dart';
+import '../../../../shared/presentation/widgets/custom_gradient_overlay.dart';
 import '../../../../shared/presentation/widgets/widgets.dart';
 import '../blocs/discover/discover_bloc.dart';
 
@@ -23,13 +26,78 @@ class DiscoverScreen extends StatelessWidget {
             );
           }
           if (state is DiscoverLoaded) {
-            debugPrint(state.users.toString());
-            return Container();
+            return MasonryGridView.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              itemCount: state.users.length,
+              itemBuilder: (context, index) {
+                User user = state.users[index];
+                return _DiscoverUserCard(
+                  user: user,
+                  index: index,
+                );
+              },
+            );
           } else {
             return const Text('Something went wrong.');
           }
         },
       ),
+    );
+  }
+}
+
+class _DiscoverUserCard extends StatelessWidget {
+  const _DiscoverUserCard({
+    Key? key,
+    required this.user,
+    required this.index,
+  }) : super(key: key);
+
+  final User user;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          height: (index == 0) ? 250 : 300,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: (user.imagePath == null)
+                  ? const AssetImage('assets/images_1.jpg')
+                  : AssetImage(user.imagePath!),
+            ),
+          ),
+        ),
+        const CustomGradientOverlay(
+          stops: [0.4, 1.0],
+          colors: [Colors.transparent, Colors.black],
+        ),
+        Positioned(
+          left: 10,
+          bottom: 10,
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: (user.imagePath == null)
+                    ? null
+                    : AssetImage(user.imagePath!),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                user.username.value,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
