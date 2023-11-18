@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 //import '../features/auth/data/datasources/mock_auth_datasource.dart';
 import '../features/auth/presentation/blocs/auth/auth_bloc.dart';
+import '../features/content/presentation/view/add_content_screen.dart';
 import '../features/auth/presentation/view/login_screen.dart';
 import '../features/auth/presentation/view/signup_screen.dart';
 import '../features/feed/data/repositories/post_repository_impl.dart';
@@ -75,6 +76,13 @@ class AppRouter {
             },
           ),
         ],
+      ),
+         GoRoute(
+        name: 'add_content',
+        path: '/add-content',
+        builder: (BuildContext context, GoRouterState state) {
+          return const AddContentScreen();
+        },
       ),
     ],
     // redirect: (
