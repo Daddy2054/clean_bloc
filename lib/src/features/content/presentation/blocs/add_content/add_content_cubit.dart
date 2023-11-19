@@ -4,12 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../../shared/domain/entities/post.dart';
+import '../../../../../shared/domain/entities/user.dart';
+import '../../../domain/usecases/create_post.dart';
+
 part 'add_content_state.dart';
 
 class AddContentCubit extends Cubit<AddContentState> {
-  // TODO: Add a use case to create a new post and save it.
+  final CreatePost _createPost;
 
-  AddContentCubit() : super(AddContentState.initial());
+
+  AddContentCubit({
+    required CreatePost createPost,
+  })  : _createPost = createPost,
+        super(AddContentState.initial());
 
   void videoChanged(File file) {
     emit(state.copyWith(
@@ -26,7 +34,18 @@ class AddContentCubit extends Cubit<AddContentState> {
   }
 
   void submit() {
-    debugPrint(state.toString());
+    try {
+      final post = Post(
+        id: 'post_000',
+        user: User.empty,
+        caption: state.caption,
+        assetPath: state.video!.path,
+      );
+      _createPost(CreatePostParams(post: post));
+      debugPrint('The post has been created.');
+
+      emit(state.copyWith(status: AddContentStatus.success));
+    } catch (err) {}
   }
 
   void reset() {
