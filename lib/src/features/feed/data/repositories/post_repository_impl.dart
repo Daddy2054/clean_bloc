@@ -33,7 +33,16 @@ class PostRepositoryImpl implements PostRepository {
 
   @override
   Future<List<Post>> getPostsByUser(String userId) async {
-    return mockFeedDatasource.getPostsByUser(userId);
+      if ((await localFeedDatasource.getPostsByUser(userId)).isEmpty) {
+      List<Post> posts = await mockFeedDatasource.getPostsByUser(userId);
+      for (final post in posts) {
+        localFeedDatasource.addPost(post);
+      }
+      return posts;
+    } else {
+      print('Getting the posts from Hive');
+      return localFeedDatasource.getPostsByUser(userId);
+    }
   }
 
   @override
