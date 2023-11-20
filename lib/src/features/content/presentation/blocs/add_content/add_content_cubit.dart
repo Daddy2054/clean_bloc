@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../../shared/domain/entities/post.dart';
 import '../../../../../shared/domain/entities/user.dart';
@@ -12,7 +13,6 @@ part 'add_content_state.dart';
 
 class AddContentCubit extends Cubit<AddContentState> {
   final CreatePost _createPost;
-
 
   AddContentCubit({
     required CreatePost createPost,
@@ -33,11 +33,11 @@ class AddContentCubit extends Cubit<AddContentState> {
     ));
   }
 
-  void submit() {
+  void submit(User user) {
     try {
       final post = Post(
-        id: 'post_000',
-        user: User.empty,
+        id: const Uuid().v4(),
+        user: user,
         caption: state.caption,
         assetPath: state.video!.path,
       );

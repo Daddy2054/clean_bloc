@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-//import 'package:path/path.dart';
-import 'package:path/path.dart' as p;
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../../shared/presentation/widgets/widgets.dart';
+import '../../../auth/presentation/blocs/auth/auth_bloc.dart';
 import '../blocs/add_content/add_content_cubit.dart';
 
 class AddContentScreen extends StatelessWidget {
@@ -20,20 +21,27 @@ class AddContentScreen extends StatelessWidget {
         title: const Text('Add Content'),
         centerTitle: true,
         backgroundColor: Colors.black,
+        leading: BackButton(
+          onPressed: () {
+            context.goNamed('feed');
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () {
               context.read<AddContentCubit>().reset();
             },
             icon: const Icon(Icons.clear),
-          )
+          ),
         ],
       ),
       backgroundColor: Colors.white,
       body: BlocConsumer<AddContentCubit, AddContentState>(
         buildWhen: (previous, current) => previous.video != current.video,
         listener: (context, state) {
-          // TODO: implement listener
+           if (state.status == AddContentStatus.success) {
+            context.goNamed('feed');
+          }
         },
         builder: (context, state) {
           if (state.video == null) {
@@ -108,7 +116,7 @@ class AddContentScreen extends StatelessWidget {
     }
 
     final directory = await getApplicationDocumentsDirectory();
-    final fileName = p.basename(uploadedVideo.path);
+    final fileName = basename(uploadedVideo.path);
     final savedVideo =
         await File(uploadedVideo.path).copy('${directory.path}/$fileName');
     debugPrint(savedVideo.toString());
@@ -166,7 +174,9 @@ class AddContentScreen extends StatelessWidget {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  context.read<AddContentCubit>().submit();
+                  context.read<AddContentCubit>().submit(
+                        context.read<AuthBloc>().state.user,
+                      );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
