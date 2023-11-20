@@ -7,6 +7,15 @@ abstract class ManageContentEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class ManageContentDeletePost extends ManageContentEvent {
+  final Post post;
+
+  const ManageContentDeletePost({required this.post});
+
+  @override
+  List<Object> get props => [post];
+}
+
 class ManageContentGetPostsByUser extends ManageContentEvent {
   final String userId;
 

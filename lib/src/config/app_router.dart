@@ -9,6 +9,7 @@ import '../features/auth/presentation/blocs/auth/auth_bloc.dart';
 import '../features/auth/presentation/view/login_screen.dart';
 import '../features/auth/presentation/view/signup_screen.dart';
 import '../features/content/domain/usecases/create_post.dart';
+import '../features/content/domain/usecases/delete_post.dart';
 import '../features/content/presentation/blocs/add_content/add_content_cubit.dart';
 import '../features/content/presentation/blocs/manage_content/manage_content_bloc.dart';
 import '../features/content/presentation/view/add_content_screen.dart';
@@ -96,15 +97,16 @@ class AppRouter {
           );
         },
       ),
-
       GoRoute(
         name: 'manage_content',
         path: '/manage_content',
-
         builder: (BuildContext context, GoRouterState state) {
           return BlocProvider(
             create: (context) => ManageContentBloc(
               getPostsByUser: GetPostsByUser(
+                context.read<PostRepositoryImpl>(),
+              ),
+              deletePostById: DeletePostById(
                 context.read<PostRepositoryImpl>(),
               ),
             )..add(

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../../shared/data/models/post_model.dart';
@@ -7,6 +8,7 @@ abstract class LocalFeedDatasource {
   Future<List<Post>> getPosts();
   Future<List<Post>> getPostsByUser(String userId);
   Future<void> addPost(Post post);
+  Future<void> deletePostById(String postId);
   Future<void> deleteAllPosts();
 }
 
@@ -25,7 +27,13 @@ class LocalFeedDatasourceImpl implements LocalFeedDatasource {
     Box box = await _openBox();
     await box.clear();
   }
-
+  @override
+  Future<void> deletePostById(String postId) async {
+    Box box = await _openBox();
+    PostModel post = box.get(postId);
+    debugPrint("Delete post: ${post.id}");
+    box.delete(postId);
+  }
   @override
   Future<List<Post>> getPosts() async {
     Box<PostModel> box = await _openBox() as Box<PostModel>;

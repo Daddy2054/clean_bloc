@@ -49,4 +49,10 @@ class PostRepositoryImpl implements PostRepository {
   Future<void> createPost(Post post) {
     return localFeedDatasource.addPost(post);
   }
+
+
+  @override
+  Future<void> deletePostById(String postId) {
+    return localFeedDatasource.deletePostById(postId);
+  }
 }

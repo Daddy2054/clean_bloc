@@ -37,12 +37,14 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     controller.initialize().then((_) => setState(() {}));
     controller.setLooping(true);
     controller.play();
+    debugPrint("Init controller: $controller");
 
     super.initState();
   }
 
   @override
   void dispose() {
+    debugPrint("Dispose controller: $controller");
     controller.dispose();
     super.dispose();
   }

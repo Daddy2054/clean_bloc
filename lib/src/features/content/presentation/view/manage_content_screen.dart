@@ -36,6 +36,8 @@ class ManageContentScreen extends StatelessWidget {
             );
           }
           if (state is ManageContentLoaded) {
+            debugPrint(
+                "This are the posts: ${state.posts.map((post) => post.id).toList()}");
             return DefaultTabController(
               length: 2,
               child: NestedScrollView(
@@ -104,8 +106,18 @@ class ManageContentScreen extends StatelessWidget {
                         childAspectRatio: 9 / 16,
                       ),
                       itemBuilder: (context, index) {
-                        return CustomVideoPlayer(
-                          assetPath: state.posts[index].assetPath,
+                        return InkWell(
+                          onDoubleTap: () {
+                            context.read<ManageContentBloc>().add(
+                                  ManageContentDeletePost(
+                                    post: state.posts[index],
+                                  ),
+                                );
+                          },
+                          child: CustomVideoPlayer(
+                            key: UniqueKey(),
+                            assetPath: state.posts[index].assetPath,
+                          ),
                         );
                       },
                     ),
