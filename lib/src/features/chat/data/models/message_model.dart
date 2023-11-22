@@ -1,11 +1,22 @@
 
+import 'package:hive/hive.dart';
+
 import '../../domain/entities/message.dart';
 
+part 'message_model.g.dart';
+
+@HiveType(typeId: 2)
 class MessageModel {
+  @HiveField(0)
+
   final String chatId;
+  @HiveField(1)
   final String senderId;
+  @HiveField(2)
   final String recipientId;
+  @HiveField(3)
   final String text;
+  @HiveField(4)
   final DateTime createdAt;
 
   const MessageModel({

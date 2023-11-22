@@ -1,11 +1,19 @@
+import 'package:hive/hive.dart';
+
 import '../../../../shared/data/models/user_model.dart';
 import '../../domain/entities/chat.dart';
 import 'message_model.dart';
+part 'chat_model.g.dart';
 
+@HiveType(typeId: 3)
 class ChatModel {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final UserModel currentUser;
+  @HiveField(2)
   final UserModel otherUser;
+  @HiveField(3)
   final List<MessageModel>? messages;
 
   const ChatModel({
