@@ -16,8 +16,11 @@ import 'src/features/auth/domain/usecases/signup_user.dart';
 import 'src/features/auth/presentation/blocs/auth/auth_bloc.dart';
 import 'src/features/auth/presentation/blocs/login/login_cubit.dart';
 import 'src/features/auth/presentation/blocs/signup/signup_cubit.dart';
+import 'src/features/chat/data/datasources/local_chat_datasource.dart';
+import 'src/features/chat/data/datasources/mock_chat_datasource.dart';
 import 'src/features/chat/data/models/chat_model.dart';
 import 'src/features/chat/data/models/message_model.dart';
+import 'src/features/chat/domain/repositories/chat_repository_impl.dart';
 import 'src/features/feed/data/datasources/local_feed_datasource.dart';
 import 'src/features/feed/data/datasources/mock_feed_datasource.dart';
 import 'src/features/feed/data/repositories/post_repository_impl.dart';
@@ -58,6 +61,12 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => UserRepositoryImpl(
             MockFeedDatasourceImpl(),
+          ),
+        ),
+              RepositoryProvider(
+          create: (context) => ChatRepositoryImpl(
+            MockChatDatasourceImpl(),
+            LocalChatDatasourceImpl(),
           ),
         ),
       ],
