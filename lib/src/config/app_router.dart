@@ -11,6 +11,7 @@ import '../features/auth/presentation/view/signup_screen.dart';
 import '../features/chat/domain/repositories/chat_repository_impl.dart';
 import '../features/chat/domain/usecases/get_chats_by_user.dart';
 import '../features/chat/presentation/blocs/chat_list/chat_list_bloc.dart';
+import '../features/chat/presentation/view/chat_list_screen.dart';
 import '../features/content/domain/usecases/create_post.dart';
 import '../features/content/domain/usecases/delete_post.dart';
 import '../features/content/presentation/blocs/add_content/add_content_cubit.dart';
@@ -138,6 +139,30 @@ class AppRouter {
             child: const ChatListScreen(),
           );
         },
+        //         routes: [
+        //   GoRoute(
+        //     name: 'chat',
+        //     path: ':chatId', // /chat/:chatId
+        //     builder: (BuildContext context, GoRouterState state) {
+        //       return BlocProvider(
+        //         create: (context) => ChatBloc(
+        //           getChatById: GetChatById(
+        //             context.read<ChatRepositoryImpl>(),
+        //           ),
+        //           updateChat: UpdateChat(
+        //             context.read<ChatRepositoryImpl>(),
+        //           ),
+        //         )..add(
+        //             ChatGetChat(
+        //               userId: context.read<AuthBloc>().state.user.id,
+        //               chatId: state.params['chatId']!,
+        //             ),
+        //           ),
+        //         child: const ChatScreen(),
+        //       );
+        //     },
+        //   ),
+        // ],
       ),
     ],
     redirect: (

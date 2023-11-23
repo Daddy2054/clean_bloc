@@ -31,20 +31,20 @@ class CustomNavBar extends StatelessWidget {
             IconButton(
               onPressed: () {
                 context.goNamed('add_content');
-
               },
               iconSize: 30,
               icon: const Icon(Icons.add_circle),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                context.goNamed('chats');
+              },
               iconSize: 30,
               icon: const Icon(Icons.message),
             ),
             IconButton(
               onPressed: () {
-                // context.read<AuthBloc>().add(AuthLogoutUser());
-               context.goNamed('manage_content');
+                context.goNamed('manage_content');
               },
               iconSize: 30,
               icon: const Icon(Icons.person),

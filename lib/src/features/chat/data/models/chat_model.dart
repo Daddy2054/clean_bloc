@@ -33,7 +33,7 @@ class ChatModel {
       currentUser: UserModel.fromJson(currentUser),
       otherUser: UserModel.fromJson(otherUser),
       messages: (json['messages'] as List).map((message) {
-        return MessageModel.fromJson(json, json['id']);
+        return MessageModel.fromJson(message, json['id']);
       }).toList(),
     );
   }
