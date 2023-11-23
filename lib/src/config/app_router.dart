@@ -8,6 +8,9 @@ import '../features/auth/data/datasources/mock_auth_datasource.dart';
 import '../features/auth/presentation/blocs/auth/auth_bloc.dart';
 import '../features/auth/presentation/view/login_screen.dart';
 import '../features/auth/presentation/view/signup_screen.dart';
+import '../features/chat/domain/repositories/chat_repository_impl.dart';
+import '../features/chat/domain/usecases/get_chats_by_user.dart';
+import '../features/chat/presentation/blocs/chat_list/chat_list_bloc.dart';
 import '../features/content/domain/usecases/create_post.dart';
 import '../features/content/domain/usecases/delete_post.dart';
 import '../features/content/presentation/blocs/add_content/add_content_cubit.dart';
@@ -115,6 +118,24 @@ class AppRouter {
                 ),
               ),
             child: const ManageContentScreen(),
+          );
+        },
+      ),
+           GoRoute(
+        name: 'chats',
+        path: '/chats',
+        builder: (BuildContext context, GoRouterState state) {
+          return BlocProvider(
+            create: (context) => ChatListBloc(
+                getChatsByUser: GetChatsByUser(
+              context.read<ChatRepositoryImpl>(),
+            ))
+              ..add(
+                ChatGetChats(
+                  userId: context.read<AuthBloc>().state.user.id,
+                ),
+              ),
+            child: const ChatListScreen(),
           );
         },
       ),
