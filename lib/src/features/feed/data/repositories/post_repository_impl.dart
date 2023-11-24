@@ -40,7 +40,7 @@ class PostRepositoryImpl implements PostRepository {
       }
       return posts;
     } else {
-      print('Getting the posts from Hive');
+      debugPrint('Getting the posts from Hive');
       return localFeedDatasource.getPostsByUser(userId);
     }
   }

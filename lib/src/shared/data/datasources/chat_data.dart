@@ -36,6 +36,13 @@ List<Map<String, dynamic>> chats = [
         'recipientId': 'user_1',
         'text': 'I am good, thanks.',
         'createdAt': DateTime(2022, 08, 01, 10, 12, 22),
+      },
+      {
+        'messageId': 'message_2',
+        'senderId': 'user_3',
+        'recipientId': 'user_1',
+        'text': 'But I have a question for you.',
+        'createdAt': DateTime(2022, 08, 01, 10, 12, 22),
       }
     ]
   }

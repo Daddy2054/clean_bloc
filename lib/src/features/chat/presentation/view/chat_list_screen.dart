@@ -61,9 +61,11 @@ class _Chat extends StatelessWidget {
         context.go(
           context.namedLocation(
             'chat',
-            // params: <String, String>{
-            //   'chatId': chat.id,
-            // },
+            pathParameters: <String, String>{
+                      // chatId: state.pathParameters['chatId']!,
+              //
+              'chatId': chat.id,
+            },
           ),
         );
       },

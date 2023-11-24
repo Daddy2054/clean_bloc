@@ -15,6 +15,7 @@ import '../features/chat/domain/usecases/update_chat.dart';
 import '../features/chat/presentation/blocs/chat/chat_bloc.dart';
 import '../features/chat/presentation/blocs/chat_list/chat_list_bloc.dart';
 import '../features/chat/presentation/view/chat_list_screen.dart';
+import '../features/chat/presentation/view/chat_screen.dart';
 import '../features/content/domain/usecases/create_post.dart';
 import '../features/content/domain/usecases/delete_post.dart';
 import '../features/content/presentation/blocs/add_content/add_content_cubit.dart';
@@ -125,7 +126,7 @@ class AppRouter {
           );
         },
       ),
-           GoRoute(
+      GoRoute(
         name: 'chats',
         path: '/chats',
         builder: (BuildContext context, GoRouterState state) {
@@ -142,7 +143,7 @@ class AppRouter {
             child: const ChatListScreen(),
           );
         },
-                routes: [
+        routes: [
           GoRoute(
             name: 'chat',
             path: ':chatId', // /chat/:chatId
@@ -155,14 +156,13 @@ class AppRouter {
                   updateChat: UpdateChat(
                     context.read<ChatRepositoryImpl>(),
                   ),
-                )
-                // ..add(
-                //     ChatGetChat(
-                //       userId: context.read<AuthBloc>().state.user.id,
-                //       chatId: state.params['chatId']!,
-                    // ),
-                  // ),
-                // child: const ChatScreen(),
+                )..add(
+                    ChatGetChat(
+                      userId: context.read<AuthBloc>().state.user.id,
+                      chatId: state.pathParameters['chatId']!,
+                    ),
+                  ),
+                child: const ChatScreen(),
               );
             },
           ),
